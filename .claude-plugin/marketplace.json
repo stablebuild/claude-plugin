@@ -1,0 +1,17 @@
+{
+  "name": "stablebuild",
+  "owner": {
+    "name": "StableBuild",
+    "email": "support@stablebuild.com"
+  },
+  "metadata": {
+    "description": "StableBuild's plugins for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "stablebuild",
+      "source": "./",
+      "description": "Pin Docker base images, apt/Alpine packages, PyPI packages, downloaded files and HuggingFace models to StableBuild's immutable mirrors, so builds stay reproducible."
+    }
+  ]
+}

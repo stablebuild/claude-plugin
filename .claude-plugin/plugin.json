@@ -1,0 +1,13 @@
+{
+  "name": "stablebuild",
+  "version": "0.1.0",
+  "description": "Pin Docker base images, apt/Alpine packages, PyPI packages, downloaded files and HuggingFace models to StableBuild's immutable mirrors, so builds stay reproducible.",
+  "author": {
+    "name": "StableBuild",
+    "email": "support@stablebuild.com",
+    "url": "https://stablebuild.com"
+  },
+  "homepage": "https://docs.stablebuild.com",
+  "license": "MIT",
+  "keywords": ["stablebuild", "docker", "reproducible-builds", "apt", "pypi", "huggingface"]
+}

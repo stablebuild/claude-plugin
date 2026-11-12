@@ -15,7 +15,19 @@ FROM ${SB_API_KEY}.dockermirror.stablebuild.com/quay.io/prometheus/prometheus:v3
 
 Supported registries: Docker Hub, `ghcr.io`, `nvcr.io`, `public.ecr.aws`, `quay.io`. Private repositories aren't supported, so leave those images as they are.
 
-An `ARG` declared before the first `FROM` can only be used in `FROM` lines. To use the key in a stage's `RUN` commands, declare `ARG SB_API_KEY` again inside that stage. The same goes for `COPY --from=<image>` and `RUN --mount=from=<image>`: they pull images too, so prefix those as well.
+An `ARG` declared before the first `FROM` can only be used in `FROM` lines. To use the key in a stage's `RUN` commands, declare `ARG SB_API_KEY` again inside that stage.
+
+`COPY --from=<image>` and `RUN --mount=from=<image>` pull images too, but `--from` doesn't expand variables, so `${SB_API_KEY}` can't go there. Pull the image in a stage of its own, above the stage that uses it, and refer to that stage by name. For `COPY --from=ghcr.io/astral-sh/uv:0.5.11 /uv /uvx /bin/`:
+
+```dockerfile
+ARG SB_API_KEY
+FROM ${SB_API_KEY}.dockermirror.stablebuild.com/ghcr.io/astral-sh/uv:0.5.11 AS uv
+
+FROM ${SB_API_KEY}.dockermirror.stablebuild.com/ubuntu:noble-20261110
+COPY --from=uv /uv /uvx /bin/
+```
+
+Mounts work the same way: `RUN --mount=from=uv,source=/uv,target=/bin/uv uv sync`.
 
 ## Use a specific tag
 

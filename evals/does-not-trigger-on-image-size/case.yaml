@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: does-not-trigger-on-image-size
+expected_outcome: |
+  The request is about image size, not reproducibility, so the pin-dependencies skill is not used and the Dockerfile is slimmed down.
+context:
+  scaffold_script: place-files.sh

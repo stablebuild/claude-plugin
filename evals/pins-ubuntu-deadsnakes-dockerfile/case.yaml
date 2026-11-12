@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: pins-ubuntu-deadsnakes-dockerfile
+expected_outcome: |
+  The Dockerfile pulls its base image, apt packages (Ubuntu and the deadsnakes PPA),
+  get-pip.py and all PyPI packages through StableBuild, with pin dates that work for
+  Ubuntu 20.04, the key passed as a build arg, and sb-apt.sh next to the Dockerfile.
+context:
+  scaffold_script: place-files.sh

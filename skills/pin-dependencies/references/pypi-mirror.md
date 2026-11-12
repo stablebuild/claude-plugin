@@ -33,7 +33,7 @@ name = "stablebuild"
 url = "https://<key>.pypimirror.stablebuild.com/2026-11-11/"
 ```
 
-These files go into git, and `uv.lock` / `poetry.lock` record the index URL too, so this puts the key in the repository. Only do this in a private repo, or with a public key, and ask the user first.
+These files go into git, and `uv.lock` / `poetry.lock` record the index URL too, so this puts the key in the repository. That's fine in a private repo. In a public repo, use a public key.
 
 Projects with a lock file already have fixed versions. What they still lack is protection against packages being deleted from PyPI. For that, the date `live` resolves against today's index but serves (and stores) every file from the mirror cache: `https://<key>.pypimirror.stablebuild.com/live/`.
 

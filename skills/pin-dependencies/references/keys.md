@@ -4,9 +4,11 @@ Full docs: https://docs.stablebuild.com/product/public-api-keys and https://docs
 
 ## Private keys (the default)
 
-A private key can download anything, and all of its traffic is billed to the organization. Keep it out of git: use `ARG SB_API_KEY` with no default, and pass it with `--build-arg`. In CI, store it as a secret. In `docker-compose.yml`, use `build.args: { SB_API_KEY: ${SB_API_KEY} }`, so it comes from the environment.
+A private key can download anything, and all of its traffic is billed to the organization. In a private repo, it's fine to commit it as the default of `ARG SB_API_KEY`: everyone who can read the repo can build, and nothing else needs configuring. If the user would still rather keep it out of git, use `ARG SB_API_KEY` without a default and pass it in with `--build-arg`, from a CI secret, or in `docker-compose.yml` with `build.args: { SB_API_KEY: ${SB_API_KEY} }`.
 
-BuildKit warns `SecretsUsedInArgOrEnv` about `ARG SB_API_KEY`. That's expected for images that stay internal. The warning is about what the next section covers.
+If a repo with a committed private key becomes public, the user should rotate the key and switch to a public key.
+
+BuildKit warns `SecretsUsedInArgOrEnv` about `ARG SB_API_KEY`. That's expected for images that stay internal. The warning is about what the last section covers.
 
 If a key might have leaked, the user can check **Billing > Raw usage logs** (every request lists its key) and rotate the key under **Keys**.
 
@@ -18,7 +20,9 @@ A public key (`<prefix>-pub-<name>`) is read-only. It only serves files that are
 2. Open a write window on the key (1 hour, 24 hours or 7 days). While it's open, the key works like a normal key and everything it downloads is added to its allow-list.
 3. Build once with the public key, then close the window.
 
-When the dependencies change, open a new window and build again. All traffic through the key is still billed to the organization.
+While a write window is open, anyone with the key can download anything through it. Keep the window short and close it as soon as the build has finished. Closing can take up to 5 minutes to apply.
+
+When the dependencies change, open a new window and build again. All traffic through the key is still billed to the organization. On the Community plan, builds through the key fail once the organization's monthly traffic limit is reached.
 
 ## Images pushed to a public registry
 
@@ -42,7 +46,7 @@ RUN --mount=type=secret,id=sb-api-key,target=/run/secrets/sb-api-key \
 
 Build it with `docker build --secret id=sb-api-key,env=SB_API_KEY .`. The `FROM scratch` stage drops the key from the image config. The secret mount keeps it out of the history. Cleaning up in the same `RUN` keeps it out of the layers.
 
-Note that the global `ARG SB_API_KEY` is still needed for the first `FROM`, so the key still has to be passed with `--build-arg`. This is safe because the `FROM scratch` stage doesn't keep that `ARG`.
+The global `ARG SB_API_KEY` is still needed for the first `FROM`, either with a default or passed in with `--build-arg`. This is safe because the `FROM scratch` stage doesn't keep that `ARG`.
 
 Kaniko has no build secrets. There, write the key to a file under `/kaniko/` before calling the executor, and mount that path instead.
 

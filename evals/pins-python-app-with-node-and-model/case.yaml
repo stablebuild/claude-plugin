@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: pins-python-app-with-node-and-model
+expected_outcome: |
+  Every download in the build goes through a StableBuild mirror where one exists:
+  base image, Debian packages, Node.js, the yq binary, the libvips commit, PyPI packages
+  and the HuggingFace model (pinned to a revision). The key is set in one place that
+  docker compose builds pick up, and the response says npm packages are not covered.
+context:
+  scaffold_script: place-files.sh

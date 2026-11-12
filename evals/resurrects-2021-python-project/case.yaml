@@ -1,0 +1,8 @@
+schema_version: "1.1"
+name: resurrects-2021-python-project
+expected_outcome: |
+  A new Dockerfile on a Python 3.8 base image from the Docker mirror installs
+  requirements.txt from the PyPI mirror pinned to around the last commit (2021-03-14),
+  and the response sets up a public API key so outside contributors can build it.
+context:
+  scaffold_script: place-files.sh

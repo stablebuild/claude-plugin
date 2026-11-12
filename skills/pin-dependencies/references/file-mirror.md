@@ -9,7 +9,7 @@ RUN curl -fsSL "https://${SB_API_KEY}.httpcache.stablebuild.com/my-app/https://a
 ADD https://${SB_API_KEY}.httpcache.stablebuild.com/my-app/https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 /usr/local/bin/jq
 ```
 
-- **Cache key:** every key is a separate cache. Use the project or image name, so different projects can hold different versions of the same URL. To get a newer upstream file later, the user deletes the cached copy in the dashboard or switches to a new key.
+- **Cache key:** every key is a separate cache. Use the project or image name, so different projects can hold different versions of the same URL. To get a newer upstream file later, the user deletes the cached copy in the dashboard or switches to a new key. Never use `api`: the mirror reserves paths starting with `/api/` and answers them with `403 Invalid API key`. For a project or service named `api`, use something like `api-image`.
 - Shell expansion in the URL (`$(arch)`, `${VERSION}`) works as usual. Quote the whole URL.
 - **`git clone`** can't be cached. Download an archive of the exact commit or tag instead: `https://github.com/<org>/<repo>/archive/<commit-sha>.zip` or `.../archive/refs/tags/<tag>.tar.gz`, then extract it. If the Dockerfile clones a branch, ask the user which commit to pin.
 - **Authentication:** headers (`-H "x-api-key: ..."`) and basic auth in the URL (`https://user:pass@host/...`) are forwarded upstream on the first fetch only. After that, the URL alone identifies the cached file.

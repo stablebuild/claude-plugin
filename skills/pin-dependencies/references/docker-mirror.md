@@ -34,7 +34,7 @@ curl -s "https://hub.docker.com/v2/repositories/library/ubuntu/tags?page_size=10
 
 If there's no more specific tag, keep the current one and tell the user that it will be frozen at its first pull.
 
-Prefer tags over `@sha256:` digests. A digest belongs to one architecture, while the mirror caches every architecture of a tag (useful when developers on ARM Macs build the same image as x86 servers). Digests do work, though.
+Prefer tags over `@sha256:` digests: a tag says what it is, and the mirror already makes it immutable, including every architecture (useful when developers on ARM Macs build the same image as x86 servers). If the Dockerfile already uses digests, leave them, since they work through the mirror too.
 
 ## When the Dockerfile can't change
 

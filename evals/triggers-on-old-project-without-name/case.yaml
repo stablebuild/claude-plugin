@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: triggers-on-old-project-without-name
+expected_outcome: |
+  Without the user naming StableBuild, the pin-dependencies skill is used to install the 2020 dependencies from the PyPI mirror pinned to around August 2020.
+context:
+  scaffold_script: place-files.sh

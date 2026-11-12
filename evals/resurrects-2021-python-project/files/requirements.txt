@@ -1,0 +1,6 @@
+tensorflow==2.4.1
+keras
+numpy
+h5py
+pillow
+matplotlib

@@ -38,7 +38,14 @@ Arguments to `load-apt-sources`:
 | `ros2` | ROS 2 | Ubuntu 22.04+, from 2026-07-24 |
 | `qcom-iot` | Qualcomm IoT PPA (arm64) | Ubuntu |
 
-Node.js from NodeSource isn't installed through `load-apt-sources`. Use `RUN bash /opt/sb-apt.sh install-node-js <exact version>`, which needs `wget` in the image. `scripts/node-versions.sh <major> <APT_PIN_DATE>` lists the versions in a snapshot.
+Node.js from NodeSource isn't installed through `load-apt-sources`. Use `install-node-js <exact version>`, after installing `wget`, `python3` and `ca-certificates` from the pinned sources. The script downloads with `wget` and installs with `dpkg`, which doesn't fetch dependencies, and every NodeSource package depends on `python3` and `ca-certificates`. Official `python:*` images don't count: their Python isn't the `python3` package.
+
+```dockerfile
+RUN apt update && apt install -y wget python3 ca-certificates
+RUN bash /opt/sb-apt.sh install-node-js 20.20.2
+```
+
+`scripts/node-versions.sh <major> <APT_PIN_DATE>` lists the versions in a snapshot.
 
 Replace each upstream repository setup with its argument above, and remove the lines it replaces: `add-apt-repository ppa:deadsnakes/ppa`, `curl ... | gpg --dearmor`, `echo "deb ..." > /etc/apt/sources.list.d/...`, `curl ... setup_20.x | bash`. Apt sources left in `sources.list.d` aren't pinned, and `sb-apt.sh` prints a warning for them. Once the PPA line is gone, `software-properties-common` might no longer be needed. Remove it only if nothing else uses it, and mention it in the report.
 

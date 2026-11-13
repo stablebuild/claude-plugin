@@ -1,5 +1,6 @@
 {
   "name": "stablebuild",
+  "displayName": "StableBuild",
   "version": "0.1.0",
   "description": "Pin Docker base images, apt/Alpine packages, PyPI packages, downloaded files and HuggingFace models to StableBuild's immutable mirrors, so builds stay reproducible.",
   "author": {
